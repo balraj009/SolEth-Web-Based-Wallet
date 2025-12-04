@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+:root {
+  --bg: 255 255 255;
+  --text: 17 24 39;
+}
+
+.dark {
+  --bg: 17 24 39;
+  --text: 226 232 240;
+}
+
+body {
+  background-color: rgb(var(--bg));
+  color: rgb(var(--text));
+}

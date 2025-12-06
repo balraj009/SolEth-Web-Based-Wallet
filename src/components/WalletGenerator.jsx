@@ -86,13 +86,13 @@ function WalletGenerator() {
 
   const togglePrivateKeyVisibility = (index) => {
     setVisiblePrivateKeys(
-      visiblePrivateKeys.map((visible, i) => (i == index ? !visible : visible))
+      visiblePrivateKeys.map((visible, i) => (i === index ? !visible : visible))
     );
   };
 
   const togglePhrasesVisibility = (index) => {
     setVisiblePhrases(
-      visiblePhrases.map((visible, i) => (i == index ? !visible : visible))
+      visiblePhrases.map((visible, i) => (i === index ? !visible : visible))
     );
   };
 
@@ -110,7 +110,7 @@ function WalletGenerator() {
 
         path = `m/44'/501'/${accountIndex}'/0'`;
 
-        const { key: derivedSeed } = derivePath(path, seedBuffer);
+        const { key: derivedSeed } = derivePath(path, seedBuffer.toString("hex"));
 
         const seedUint8 = new Uint8Array(derivedSeed);
 
@@ -250,7 +250,7 @@ function WalletGenerator() {
 
   const handleClearWallets = () => {
     localStorage.removeItem("wallets");
-    localStorage.removeItem("mnemonic");
+    localStorage.removeItem("mnemonics");
     localStorage.removeItem("paths");
 
     setWallets([]);
@@ -374,7 +374,7 @@ function WalletGenerator() {
           {showMnemonic && (
             <motion.div
               className="flex flex-col w-full items-center justify-center"
-              onClick={() => copyToClipboard(mnemonicWords.join(""))}
+              onClick={() => copyToClipboard(mnemonicWords.join(" "))}
             >
               <motion.div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 justify-center w-full items-center mx-auto my-8">
                 {mnemonicWords.map((word, index) => (

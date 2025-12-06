@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { easeInOut, motion } from "framer-motion";
 import Button from "../ui/Button";
 import { toast } from "react-toastify";
 import Input from "../ui/Input";
@@ -110,7 +110,10 @@ function WalletGenerator() {
 
         path = `m/44'/501'/${accountIndex}'/0'`;
 
-        const { key: derivedSeed } = derivePath(path, seedBuffer.toString("hex"));
+        const { key: derivedSeed } = derivePath(
+          path,
+          seedBuffer.toString("hex")
+        );
 
         const seedUint8 = new Uint8Array(derivedSeed);
 
@@ -282,76 +285,110 @@ function WalletGenerator() {
   return (
     <div className="flex flex-col gap-4">
       {wallets.length === 0 && (
-        <div className="flex flex-col gap-4 items-center">
-          {pathTypes.length === 0 && (
-            <motion.div className="flex gap-4 flex-col my-4">
-              <div className="flex flex-col gap-2 items-center">
-                <h1 className="tracking-tighter text-4xl md:text-5xl font-black text-center">
-                  SolEth Wallet supports multiple blockchains..
-                </h1>
-                <p className="text-primary/80 font-semibold text-lg md:text-xl text-center">
-                  Please select a derivation path type to proceed.
-                </p>
-              </div>
+        <motion.div
+          className="fle flex-col gap-4 items-center"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.3,
+            ease: easeInOut,
+          }}
+        >
+          <div className="flex flex-col gap-4 items-center">
+            {pathTypes.length === 0 && (
+              <motion.div
+                className="flex gap-4 flex-col my-4"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.3,
+                  ease: easeInOut,
+                }}
+              >
+                <div className="flex flex-col gap-2 items-center">
+                  <h1 className="tracking-tighter text-4xl md:text-5xl font-black text-center">
+                    SolEth Wallet supports multiple blockchains..
+                  </h1>
+                  <p className="text-primary/80 font-semibold text-lg md:text-xl text-center">
+                    Please select a derivation path type to proceed.
+                  </p>
+                </div>
 
-              <div className="flex gap-4 justify-center items-center">
-                <Button
-                  size={"lg"}
-                  onClick={() => {
-                    setPathTypes(["501"]);
-                    toast.success(
-                      "Solana selected. Please generate a wallet to continue."
-                    );
-                  }}
-                >
-                  Solana
-                </Button>
-                <Button
-                  size={"lg"}
-                  onClick={() => {
-                    setPathTypes(["60"]);
-                    toast.success(
-                      "Ethereum selected. Please generate a wallet to continue."
-                    );
-                  }}
-                >
-                  Ethereum
-                </Button>
-              </div>
-            </motion.div>
-          )}
+                <div className="flex gap-4 justify-center items-center">
+                  <Button
+                    size={"lg"}
+                    onClick={() => {
+                      setPathTypes(["501"]);
+                      toast.success(
+                        "Solana selected. Please generate a wallet to continue."
+                      );
+                    }}
+                  >
+                    Solana
+                  </Button>
+                  <Button
+                    size={"lg"}
+                    onClick={() => {
+                      setPathTypes(["60"]);
+                      toast.success(
+                        "Ethereum selected. Please generate a wallet to continue."
+                      );
+                    }}
+                  >
+                    Ethereum
+                  </Button>
+                </div>
+              </motion.div>
+            )}
 
-          {pathTypes.length !== 0 && (
-            <motion.div className="flex gap-4 flex-col my-4">
-              <div className="flex flex-col gap-2 items-center">
-                <h1 className="tracking-tighter text-4xl md:text-5xl font-black text-center">
-                  Secret Recovery Phrase
-                </h1>
-                <p className="text-primary/80 font-semibold text-lg md:text-xl text-center">
-                  Save this words somewhere safe and secure. You will need them
-                  to access your wallet.
-                </p>
-              </div>
+            {pathTypes.length !== 0 && (
+              <motion.div
+                className="flex gap-4 flex-col my-4"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.3,
+                  ease: easeInOut,
+                }}
+              >
+                <div className="flex flex-col gap-2 items-center">
+                  <h1 className="tracking-tighter text-4xl md:text-5xl font-black text-center">
+                    Secret Recovery Phrase
+                  </h1>
+                  <p className="text-primary/80 font-semibold text-lg md:text-xl text-center">
+                    Save this words somewhere safe and secure. You will need
+                    them to access your wallet.
+                  </p>
+                </div>
 
-              <div className="flex flex-col md:flex-row gap-4">
-                <Input
-                  size={"sm"}
-                  type="password"
-                  placeholder="Enter your secret phrase (or leave blank to generate new)"
-                  onChange={(e) => setMnemonicInput(e.target.value)}
-                  value={mnemonicInput}
-                />
-                <Button size={"md"} onClick={() => handleGenerateWallet()}>
-                  {mnemonicInput ? "Add Wallet" : "Generate Wallet"}
-                </Button>
-              </div>
-            </motion.div>
-          )}
-        </div>
+                <div className="flex flex-col md:flex-row gap-4">
+                  <Input
+                    size={"sm"}
+                    type="password"
+                    placeholder="Enter your secret phrase (or leave blank to generate new)"
+                    onChange={(e) => setMnemonicInput(e.target.value)}
+                    value={mnemonicInput}
+                  />
+                  <Button size={"md"} onClick={() => handleGenerateWallet()}>
+                    {mnemonicInput ? "Add Wallet" : "Generate Wallet"}
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
       )}
 
       {mnemonicWords && wallets.length > 0 && (
-        <motion.div className="flex gap-4 flex-col my-4 cursor-pointer border border-primary/10 p-8 rounded-2xl">
+        <motion.div
+          className="flex gap-4 flex-col my-4 cursor-pointer border border-primary/10 p-8 rounded-2xl"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.3,
+            ease: easeInOut,
+          }}
+        >
           <div
             className="flex w-full justify-between items-center"
             onClick={() => setShowMnemonic(!showMnemonic)}
@@ -375,8 +412,22 @@ function WalletGenerator() {
             <motion.div
               className="flex flex-col w-full items-center justify-center"
               onClick={() => copyToClipboard(mnemonicWords.join(" "))}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.3,
+                ease: easeInOut,
+              }}
             >
-              <motion.div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 justify-center w-full items-center mx-auto my-8">
+              <motion.div
+                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 justify-center w-full items-center mx-auto my-8"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.3,
+                  ease: easeInOut,
+                }}
+              >
                 {mnemonicWords.map((word, index) => (
                   <p
                     key={index}
@@ -396,7 +447,16 @@ function WalletGenerator() {
       )}
 
       {wallets.length > 0 && (
-        <motion.div className="flex flex-col gap-8">
+        <motion.div
+          className="flex flex-col gap-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.3,
+            duration: 0.3,
+            ease: easeInOut,
+          }}
+        >
           <div className="flex md:flex-row flex-col justify-between w-full gap-4 md:items-center px-8">
             <h2 className="tracking-tighter text-3xl md:text-4xl">
               {pathTypeName} Wallet
@@ -454,6 +514,13 @@ function WalletGenerator() {
               <motion.div
                 key={index}
                 className="flex flex-col rounded-2xl border border-gray-400/50"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 0.3 + index * 0.1,
+                  duration: 0.3,
+                  ease: easeInOut,
+                }}
               >
                 <div className="flex justify-between px-8 py-6">
                   <h3 className="font-bold tracking-tighter text-2xl md:text-3xl">
